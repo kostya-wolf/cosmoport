@@ -28,14 +28,24 @@ public class ShipController {
         return shipService.count();
     }
 
-    @RequestMapping(value = "/ships/{shipId}", method = RequestMethod.GET)
-    public Ship getShipById(@PathVariable("shipId") long id) {
+    @RequestMapping(value = "/ships/{id}", method = RequestMethod.GET)
+    public Ship getShipById(@PathVariable("id") long id) {
         return shipService.getShipById(id);
     }
 
     @RequestMapping(value = "/ships", method = RequestMethod.POST)
-    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseStatus(HttpStatus.OK)
     public Ship createShip(@RequestBody ShipRequest request) {
         return shipService.createShip(request);
+    }
+
+    @RequestMapping(value = "/ships/{id}", method = RequestMethod.POST)
+    public Ship updateShip(@PathVariable("id") long id, @RequestBody ShipRequest request) {
+        return shipService.updateShip(id, request);
+    }
+
+    @RequestMapping(value = "/ships/{id}", method = RequestMethod.DELETE)
+    public void deleteShip(@PathVariable("id") long id) {
+        shipService.deleteShip(id);
     }
 }

@@ -13,4 +13,5 @@ public interface ShipService {
     long count();
     Ship getShipById(long id);
     Ship createShip(ShipRequest request);
+    Ship updateShip(long id, ShipRequest request);
 }

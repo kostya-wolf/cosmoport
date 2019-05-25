@@ -8,7 +8,7 @@ public class ShipRequest {
     private String planet;
     private ShipType shipType;
     private Long prodDate;
-    private Boolean isUsed = false;
+    private Boolean isUsed;
     private Double speed;
     private Integer crewSize;
 
