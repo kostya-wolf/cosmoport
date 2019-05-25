@@ -4,13 +4,13 @@ import javax.persistence.*;
 import java.util.Date;
 
 /**
- * JPA сущность
+ * JPA (Java Persistence API) сущность корабля
  */
 @Entity
 @Table(name = "ship")
 public class Ship {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     // Название корабля (до 50 знаков включительно)

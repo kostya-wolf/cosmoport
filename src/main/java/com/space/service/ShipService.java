@@ -1,6 +1,7 @@
 package com.space.service;
 
 import com.space.model.Ship;
+import com.space.model.ShipRequest;
 
 import java.util.List;
 
@@ -10,4 +11,6 @@ import java.util.List;
 public interface ShipService {
     List<Ship> getAllShips();
     long count();
+    Ship getShipById(long id);
+    Ship createShip(ShipRequest request);
 }

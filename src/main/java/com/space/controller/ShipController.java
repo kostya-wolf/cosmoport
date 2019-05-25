@@ -1,11 +1,11 @@
 package com.space.controller;
 
 import com.space.model.Ship;
+import com.space.model.ShipRequest;
 import com.space.service.ShipServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -26,5 +26,16 @@ public class ShipController {
     @RequestMapping(value = "/ships/count", method = RequestMethod.GET)
     public long count() {
         return shipService.count();
+    }
+
+    @RequestMapping(value = "/ships/{shipId}", method = RequestMethod.GET)
+    public Ship getShipById(@PathVariable("shipId") long id) {
+        return shipService.getShipById(id);
+    }
+
+    @RequestMapping(value = "/ships", method = RequestMethod.POST)
+    @ResponseStatus(HttpStatus.CREATED)
+    public Ship createShip(@RequestBody ShipRequest request) {
+        return shipService.createShip(request);
     }
 }
