@@ -13,6 +13,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import static com.space.service.ShipSpecs.getSpecs;
+
 /**
  * Реализация интерфейса сервиса для работы с ShipRepository
  */
@@ -22,18 +24,26 @@ public class ShipServiceImpl implements ShipService {
     private ShipRepository shipRepository;
 
     @Override
-    public List<Ship> getAllShips(int pageNumber, int pageSize, String order, String name) {
-        if ("DATE".equals(order)) {
-            order = "prodDate";
-        } else {
-            order = order.toLowerCase();
-        }
-        return shipRepository.findAllBy(PageRequest.of(pageNumber, pageSize, Sort.by(order)));
+    public List<Ship> getAllShips(int pageNumber, int pageSize, String order, String name, String planet, Long after, Long before, Integer minCrewSize, Integer maxCrewSize, Double minSpeed, Double maxSpeed, Double minRating, Double maxRating, ShipType shipType, Boolean isUsed) {
+        return shipRepository.findAll(
+                getSpecs(name, planet,
+                        after, before,
+                        minCrewSize, maxCrewSize,
+                        minSpeed, maxSpeed,
+                        minRating, maxRating,
+                        shipType, isUsed),
+                PageRequest.of(pageNumber, pageSize, Sort.by(order))).getContent();
     }
 
     @Override
-    public long count() {
-        return shipRepository.count();
+    public long count(String name, String planet, Long after, Long before, Integer minCrewSize, Integer maxCrewSize, Double minSpeed, Double maxSpeed, Double minRating, Double maxRating, ShipType shipType, Boolean isUsed) {
+        return shipRepository.count(
+                getSpecs(name, planet,
+                        after, before,
+                        minCrewSize, maxCrewSize,
+                        minSpeed, maxSpeed,
+                        minRating, maxRating,
+                        shipType, isUsed));
     }
 
     @Override
@@ -96,7 +106,7 @@ public class ShipServiceImpl implements ShipService {
         return shipRepository.save(ship);
     }
 
-
+    @Override
     public void deleteShip(long id) {
         validateId(id);
         shipRepository.deleteById(id);
@@ -104,8 +114,8 @@ public class ShipServiceImpl implements ShipService {
 
     /**
      * Метод рассчитывает рейтинг корабля
-     * @param speed скорость
-     * @param used использованный / новый
+     * @param speed    скорость
+     * @param used     использованный / новый
      * @param prodDate дата выпуска
      * @return рейтинг корабля
      */
@@ -123,7 +133,7 @@ public class ShipServiceImpl implements ShipService {
      * @param d число, которое нужно окргулить
      * @return округленное число
      */
-    private Double roundDouble(double d) {
+    private double roundDouble(Double d) {
         return BigDecimal.valueOf(d).setScale(2, RoundingMode.HALF_UP).doubleValue();
     }
 
