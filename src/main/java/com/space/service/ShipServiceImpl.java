@@ -63,7 +63,7 @@ public class ShipServiceImpl implements ShipService {
         ship.setUsed(request.getUsed() == null ? false : request.getUsed());
         ship.setSpeed(roundDouble(request.getSpeed()));
         ship.setCrewSize(request.getCrewSize());
-        ship.setRating(calculateRating(request.getSpeed(), request.getUsed(), request.getProdDate()));
+        ship.setRating(calculateRating(request.getSpeed(), ship.getUsed(), request.getProdDate()));
         return shipRepository.save(ship);
     }
 
@@ -89,8 +89,9 @@ public class ShipServiceImpl implements ShipService {
             validateProdDate(prodDate);
             ship.setProdDate(new Date(prodDate));
         }
-        if (request.getUsed() != null) {
-            ship.setUsed(request.getUsed());
+        Boolean used = request.getUsed();
+        if (used != null) {
+            ship.setUsed(used);
         }
         Double speed = request.getSpeed();
         if (speed != null) {
@@ -102,14 +103,16 @@ public class ShipServiceImpl implements ShipService {
             validateCrewSize(crewSize);
             ship.setCrewSize(crewSize);
         }
-        ship.setRating(calculateRating(request.getSpeed(), request.getUsed(), request.getProdDate()));
+        if (speed != null || used != null || prodDate != null) {
+            ship.setRating(calculateRating(ship.getSpeed(), ship.getUsed(), ship.getProdDate().getTime()));
+        }
         return shipRepository.save(ship);
     }
 
     @Override
     public void deleteShip(long id) {
-        validateId(id);
-        shipRepository.deleteById(id);
+        Ship ship = getShipById(id);
+        shipRepository.delete(ship);
     }
 
     /**
