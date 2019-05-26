@@ -3,6 +3,8 @@ package com.space.service;
 import com.space.model.*;
 import com.space.repository.ShipRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -20,8 +22,13 @@ public class ShipServiceImpl implements ShipService {
     private ShipRepository shipRepository;
 
     @Override
-    public List<Ship> getAllShips() {
-        return shipRepository.findAll();
+    public List<Ship> getAllShips(int pageNumber, int pageSize, String order, String name) {
+        if ("DATE".equals(order)) {
+            order = "prodDate";
+        } else {
+            order = order.toLowerCase();
+        }
+        return shipRepository.findAllBy(PageRequest.of(pageNumber, pageSize, Sort.by(order)));
     }
 
     @Override

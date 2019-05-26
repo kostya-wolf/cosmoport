@@ -19,8 +19,12 @@ public class ShipController {
     private ShipServiceImpl shipService;
 
     @RequestMapping(value = "/ships", method = RequestMethod.GET)
-    public List<Ship> getAllShips() {
-        return shipService.getAllShips();
+    public List<Ship> getAllShips(@RequestParam(defaultValue = "0") int pageNumber,
+                                  @RequestParam(defaultValue = "3") int pageSize,
+                                  @RequestParam(defaultValue = "id") String order,
+                                  @RequestParam(required = false) String name
+                                  ) {
+        return shipService.getAllShips(pageNumber, pageSize, order, name);
     }
 
     @RequestMapping(value = "/ships/count", method = RequestMethod.GET)
@@ -34,7 +38,6 @@ public class ShipController {
     }
 
     @RequestMapping(value = "/ships", method = RequestMethod.POST)
-    @ResponseStatus(HttpStatus.OK)
     public Ship createShip(@RequestBody ShipRequest request) {
         return shipService.createShip(request);
     }
